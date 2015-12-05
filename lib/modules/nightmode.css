@@ -401,6 +401,8 @@
 	color: #ccc;
 	border-color: #888;
 }
+.res-nightmode .api-help .contents .overview code,
+.res-nightmode .api-help .contents .parameters,
 .res-nightmode .md code,
 .res-nightmode .md pre,
 .res-nightmode .content .md pre,
