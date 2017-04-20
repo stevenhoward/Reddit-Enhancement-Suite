@@ -190,7 +190,8 @@
 
 	.wiki-page .wiki-page-content .md.wiki > .toc ul,
 	.tabmenu li a,
-	.tabmenu li.selected a {
+	.tabmenu li.selected a,
+	#report form {
 		background-color: hsl(0, 0%, 15%);
 	}
 
@@ -252,7 +253,7 @@
 		&.upmod,
 		&.down,
 		&.downmod {
-			background-image: url('https://b.thumbs.redditmedia.com/WZDoQsDzUySVTErcweuA3k2HH1HU5-BZNnBXOR4FDwc.png');
+			background-image: url('../images/nightmode/arrows.png');
 			background-repeat: no-repeat;
 		}
 
@@ -280,7 +281,8 @@
 	.sidebox,
 	.subreddit-info,
 	.raisedbox,
-	.login-form-side {
+	.login-form-side,
+	.interstitial-subreddit-description {
 		background-color: #393939;
 		border-color: #151515;
 		color: #aaa;
@@ -317,8 +319,8 @@
 		background-color: #369;
 	}
 
-	input[type="text"],
-	input[type="password"],
+	input[type='text'],
+	input[type='password'],
 	.c-form-control {
 		color: #ccc;
 		border: 1px solid hsl(0, 0%, 30%);
@@ -330,12 +332,6 @@
 		color: #eee;
 	}
 
-	#report form {
-		background-color: rgb(76, 61, 61);
-	}
-
-	.reason-prompt,
-	.report-action-form li,
 	.rulespage .example,
 	#userTaggerTable th,
 	#newCommentsTable th,
@@ -347,7 +343,7 @@
 	.RESDashboardComponent .widgetPath,
 	.entry .buttons li.reported-stamp,
 	.pretty-button,
-	ul.report-reasons {
+	.report-reasons {
 		color: #000;
 	}
 
@@ -405,21 +401,7 @@
 	}
 
 	.expando-button {
-		filter: grayscale(100%) invert(80%);
-	}
-
-	// from white & blue to black and red-ish
-	&.res-showImages-highlightNSFWButton .thing.over18 .expando-button {
-		filter: hue-rotate(-40deg) invert(80%) brightness(70%) saturate(300%);
-
-		&::before {
-			content: none;
-		}
-	}
-
-	.RESdupeimg {
-		color: #eee;
-		font-size: 10px;
+		background-color: transparent;
 	}
 
 	#sr-autocomplete-area {
@@ -428,9 +410,9 @@
 
 	button,
 	submit,
-	input[type="button"],
-	input[type="submit"],
-	input[type="reset"] {
+	input[type='button'],
+	input[type='submit'],
+	input[type='reset'] {
 		color: #fff;
 		border: 1px outset hsl(0, 0%, 50%);
 		background-color: hsl(0, 0%, 30%);
@@ -449,8 +431,7 @@
 	#RESShortcutsSort,
 	#RESShortcutsRight,
 	#RESShortcutsLeft,
-	#RESShortcutsAdd,
-	#RESShortcutsTrash {
+	#RESShortcutsAdd {
 		background: #ccc;
 	}
 
@@ -460,24 +441,58 @@
 		background-color: #181818;
 	}
 
-	.report-form {
+	.traffic-table tr:nth-of-type(odd).promo-traffic-live {
+		color: #181818;
+	}
+
+	.traffic-table.promocampaign-table tr.active {
+		background-color: #6D2F39;
+		border: 2px dotted #A70000;
+	}
+
+	.sponsored-page .dashboard {
+		color: hsl(0, 0%, 87%);
+	}
+
+	.sponsored-page .campaign-editor .editor-group,
+	.sponsored-page .editor-group {
+		background-color: #151515;
+	}
+
+	.sponsored-page .campaign-editor .campaign-set {
 		background-color: #666;
-		color: #ccc;
-		border-color: #888;
+	}
+
+	.sponsored-page .linefield-content textarea,
+	.sponsored-page .linefield-content input {
+		color: #181818;
+	}
+
+	.linefield .markhelp table {
+		background-color: inherit;
+	}
+
+	.content .sponsored-page textarea,
+	.content .sponsored-page input {
+		background-color: rgb(252, 252, 252);
 	}
 
 	.md code,
 	.md pre,
+	.link .md pre,
 	.content .md pre,
+	.new-comment .md pre,
+	.usertext.border .md pre,
 	.link .md :not(pre) > code,
-	.new-comment .md :not(pre) > code {
+	.new-comment .md :not(pre) > code,
+	.usertext.border .md :not(pre) > code {
 		color: inherit;
 		border-color: rgb(88, 105, 123);
 		background-color: rgb(42, 51, 64);
 	}
 
-	.comment .md p a[href="/spoiler"],
-	.comment .md p a[href="#spoiler"] {
+	.comment .md p a[href='/spoiler'],
+	.comment .md p a[href='#spoiler'] {
 		background-color: #000;
 		color: #000;
 	}
@@ -510,7 +525,7 @@
 		background-color: #aaa;
 	}
 
-	#search input[type="text"] {
+	#search input[type='text'] {
 		color: rgb(255, 255, 255) !important;
 	}
 
@@ -519,12 +534,12 @@
 		color: hsl(0, 0%, 10%);
 	}
 
-	ul.res-search-tabs li {
-		background: linear-gradient(to top, rgb(60, 60, 60), rgb(45, 45, 45));
+	ul.res-search-tabs li a {
+		background-color: rgb(57, 57, 57);
 	}
 
-	ul.res-search-tabs li.res-search-tab-active,
-	.combined-search-page #previoussearch .res-search-pane,
+	&.res-searchHelper-searchPageTabs ul.res-search-tabs li.res-search-tab-active a,
+	&.res-searchHelper-searchPageTabs .combined-search-page #previoussearch .res-search-pane,
 	#RESConsoleContainer,
 	#SearchRES-results-container li,
 	#SearchRES-results-container li:hover,
@@ -538,11 +553,11 @@
 		border-color: #444;
 	}
 
-	.combined-search-page .search-result .search-expando.collapsed::before {
+	&.res-searchHelper-searchPageTabs .combined-search-page .search-result .search-expando.collapsed::before {
 		background: linear-gradient(to bottom, rgba(34, 34, 34, 0) 0%, rgb(34, 34, 34) 100%);
 	}
 
-	.combined-search-page .search-result-group .search-result-group-header {
+	&.res-searchHelper-searchPageTabs .combined-search-page .search-result-group .search-result-group-header {
 		border-bottom-color: rgb(128, 128, 128);
 	}
 
@@ -555,7 +570,7 @@
 	.side a,
 	.link .score.dislikes,
 	.linkcompressed .score.dislikes,
-	a[rel="tag"],
+	a[rel='tag'],
 	.dsq-help,
 	#authorInfoToolTip h3 a,
 	.reddiquette,
@@ -575,8 +590,21 @@
 	}
 
 	.thing .title {
-		color: hsl(210, 60%, 60%);
+		color: hsl(0, 0%, 87%);
+
+		.res-nightMode-coloredLinks & {
+			color: hsl(210, 60%, 60%);
+		}
 	}
+
+	.thing .source-url {
+		color: hsl(0, 0%, 80%);
+
+		.res-nightMode-coloredLinks & {
+			color: hsl(210, 60%, 50%);
+		}
+	}
+
 
 	.tagline a {
 		color: hsl(200, 30%, 55%);
@@ -587,16 +615,31 @@
 	}
 
 	.thing .title:visited,
+	.thing.visited .title,
+	.combined-search-page .search-result.visited a,
 	.combined-search-page .search-result a:visited,
 	.combined-search-page .search-result a:visited > mark {
-		color: hsl(270, 50%, 65%); // see also _styleTweaks.scss
+		// see also _styleTweaks.scss visitedStyle
+		color: hsl(0, 0%, 65%);
+
+		.res-nightMode-coloredLinks & {
+			color: hsl(270, 50%, 65%);
+		}
+	}
+
+	.thing .source-url:visited {
+		color: hsl(0, 0%, 60%);
+
+		.res-nightMode-coloredLinks & {
+			color: hsl(270, 50%, 58%);
+		}
 	}
 
 	.flair-settings ~ .tabpane-content {
 		border-color: hsl(0, 0%, 10%);
 	}
 
-	.flaircell input[type="text"] {
+	.flaircell input[type='text'] {
 		border: 1px solid #555;
 	}
 
@@ -708,6 +751,10 @@
 
 	&.res-commentBoxes .comment {
 		border-color: hsl(0, 0%, 20%) !important;
+
+		&.spam {
+			background-image: linear-gradient(hsl(0, 30%, 30%), hsl(0, 30%, 30%));
+		}
 	}
 
 	&.res-commentBoxes.res-commentHoverBorder .comment:hover {
@@ -792,7 +839,8 @@
 	.liveupdate-listing li.liveupdate:hover time,
 	.spam .domain,
 	.spam .domain a,
-	.hover-bubble.multi-selector strong {
+	.hover-bubble.multi-selector strong,
+	.subreddit-rules-page .md-container .md .subreddit-rule-description {
 		color: inherit;
 	}
 
@@ -862,20 +910,14 @@
 		background-color: #777;
 	}
 
-	.multi-details .subreddits .remove-sr,
-	.multi-details .add-sr .add {
-		border-color: hsl(0, 0%, 15%);
-		background-image: url('https://b.thumbs.redditmedia.com/TItqbtZ6QLVach67LqyHqj-cCnYMempXSwW17SDlTKM.png');
-		background-position: 0 0;
-	}
-
-	.multi-details .subreddits .remove-sr {
-		background-position: -3px -15px;
+	.subreddits .remove-sr,
+	.add-sr .add {
+		filter: invert(80%);
 	}
 
 	// Nightmode friendly snoo/balloons image
-	.with-listing-chooser:not(.multi-page) .footer-parent {
-		background: url('https://b.thumbs.redditmedia.com/oPSTBWXkQufBAIYbFWiN0eI2J06zBLDEmq1NMHQ-Ems.png') no-repeat 49% 0;
+	.with-listing-chooser.multi-page .footer-parent {
+		background: url('../images/nightmode/snooBalloons.png') no-repeat 49% 0;
 	}
 
 	#about-main #history .events.timeline .event:hover .event-content {
@@ -910,7 +952,7 @@
 	}
 
 	.about-page .abouttitle {
-		background-image: url('https://a.thumbs.redditmedia.com/xxM_X1OL6Lt4I4GC9F1SbNIcbeoZPXOmPIo6P1slaP4.png');
+		background-image: url('../images/nightmode/aboutHeader.png');
 	}
 
 	.policy-page .md p {
@@ -936,8 +978,14 @@
 	#BigEditor .markdownEditor a,
 	#BigEditor .markdownEditor .RESMacroDropdownTitle,
 	#REScommentSubToggle,
-	#alert_message {
+	#alert_message,
+	#report-action-form {
 		color: #ccc;
+	}
+
+	.titlebox form.toggle,
+	.leavemoderator {
+		background-color: inherit;
 	}
 
 	.server-seconds {
@@ -951,34 +999,29 @@
 		background: hsl(0, 0%, 15%);
 	}
 
-	.snoovatar-page .checkbox-label [type="checkbox"] + .proxy-checkbox {
+	.snoovatar-page .checkbox-label [type='checkbox'] + .proxy-checkbox {
 		background: #f00;
 	}
 
-	.snoovatar-page .checkbox-label [type="checkbox"]:checked + .proxy-checkbox {
+	.snoovatar-page .checkbox-label [type='checkbox']:checked + .proxy-checkbox {
 		background: rgb(10, 128, 46);
 	}
 
 	// Ordering of user colors is important.
-	.tagline .friend,
-	.tagline .friend:visited {
+	.tagline .friend {
 		color: rgb(210, 90, 50);
 	}
 
-	.tagline .submitter,
-	.tagline .submitter:visited {
+	.tagline .submitter {
 		color: hsl(200, 100%, 50%);
 	}
 
-	.tagline .moderator,
-	.tagline .moderator:visited {
+	.tagline .moderator {
 		color: rgb(34, 136, 34);
 	}
 
 	.tagline .admin,
-	.tagline .admin:visited,
-	.user-distinction .admin,
-	.user-distinction .admin:visited {
+	.user-distinction .admin {
 		color: rgb(200, 20, 20);
 	}
 
@@ -1017,10 +1060,6 @@
 		color: rgb(255, 255, 255);
 	}
 
-	.report-action-form {
-		background-color: #dad0b3;
-	}
-
 	.letter-body p,
 	#gold-letter h1,
 	#about-gold h1,
@@ -1053,9 +1092,8 @@
 		border-bottom-color: #aaa;
 	}
 
-	.thumbnail.self,
 	.guiders_arrow {
-		filter: invert(100%) grayscale(100%);
+		opacity: .5;
 	}
 
 	.white-field,
@@ -1065,7 +1103,9 @@
 	.instructions,
 	.linefield .delete-field,
 	#pref-delete .delete-field,
-	.contact-us-page .details li {
+	.contact-us-page .details li,
+	.subreddit-report-form input:disabled,
+	.action-form input:disabled {
 		background-color: transparent;
 	}
 
@@ -1088,10 +1128,10 @@
 		border-color: hsl(0, 0%, 30%);
 	}
 
-	.comment .md p a[href="/spoiler"]:hover,
-	.comment .md p a[href="/spoiler"]:active,
-	.comment .md p a[href="#spoiler"]:hover,
-	.comment .md p a[href="#spoiler"]:active,
+	.comment .md p a[href='/spoiler']:hover,
+	.comment .md p a[href='/spoiler']:active,
+	.comment .md p a[href='#spoiler']:hover,
+	.comment .md p a[href='#spoiler']:active,
 	.addNewWidget,
 	.editWidget,
 	#authorInfoToolTip .option,
@@ -1106,7 +1146,8 @@
 	.snoovatar-page .gold-accent a,
 	.combined-search-page .search-result-subreddit .search-subscribe-button .add.active,
 	.combined-search-page .search-result-subreddit .search-subscribe-button .remove.active,
-	.fancy-toggle-button a {
+	.fancy-toggle-button a,
+	.fancy-toggle-button .multi-count {
 		color: rgb(255, 255, 255);
 	}
 
@@ -1152,6 +1193,8 @@
 		background-color: rgb(60, 60, 60);
 	}
 
+	// Affects RES console header img.
+	// Subreddit stylesheets can't override filter, so we only use when it won't affect them.
 	#RESLogo {
 		filter: invert(79%) grayscale(100%);
 	}
@@ -1169,8 +1212,8 @@
 		border-color: rgb(60, 60, 60);
 	}
 
-	#RESConsoleContainer input[type="text"],
-	#RESConsoleContainer input[type="password"],
+	#RESConsoleContainer input[type='text'],
+	#RESConsoleContainer input[type='password'],
 	#RESConsoleContainer .c-form-control,
 	ul.token-input-list-facebook,
 	#RESConsoleContainer textarea {
@@ -1212,25 +1255,33 @@
 		color: rgb(150, 150, 150);
 	}
 
-	.toggleButton .toggleOff,
-	.toggleButton .toggleOn {
-		color: rgba(255, 255, 255, .8);
-		border-color: rgb(60, 60, 60);
-	}
+	.toggleButton {
+		.toggleOff,
+		.toggleOn,
+		&.reverseToggleButton:not(.enabled) .toggleOff,
+		&.reverseToggleButton:not(.enabled) .toggleOn {
+			color: rgba(255, 255, 255, .8);
+			border-color: rgb(60, 60, 60);
+		}
 
-	.toggleButton:not(.enabled) .toggleOn,
-	.toggleButton.enabled .toggleOff {
-		color: rgb(60, 60, 60);
-		border-color: rgb(60, 60, 60);
-		background-color: rgb(40, 40, 40);
-	}
+		&:not(.enabled) .toggleOn,
+		&.enabled .toggleOff,
+		&.reverseToggleButton.enabled .toggleOn,
+		&.reverseToggleButton:not(.enabled) .toggleOff {
+			color: rgb(60, 60, 60);
+			border-color: rgb(60, 60, 60);
+			background: rgb(40, 40, 40);
+		}
 
-	.toggleButton.enabled .toggleOn {
-		background: linear-gradient(to right, rgb(37, 69, 107), rgb(40, 40, 40));
-	}
+		&.enabled .toggleOn,
+		&.reverseToggleButton:not(.enabled) .toggleOn {
+			background: linear-gradient(to right, rgb(37, 69, 107), rgb(40, 40, 40));
+		}
 
-	.toggleButton:not(.enabled) .toggleOff {
-		background: linear-gradient(to left, rgb(136, 38, 38), rgb(40, 40, 40));
+		&:not(.enabled) .toggleOff,
+		&.reverseToggleButton.enabled .toggleOff {
+			background: linear-gradient(to left, rgb(136, 38, 38), rgb(40, 40, 40));
+		}
 	}
 
 	.link .rank {
@@ -1256,6 +1307,10 @@
 		color: hsl(0, 50%, 50%);
 	}
 
+	.spoiler-stamp {
+		color: rgb(255, 130, 0);
+	}
+
 	.diff_sub {
 		background-color: rgba(240, 128, 128 , .5);
 	}
@@ -1268,12 +1323,13 @@
 		background-color: rgba(255, 255, 0, .4);
 	}
 
-	.hover-bubble.multi-selector .create-multi input[type="text"] {
+	.hover-bubble.multi-selector .create-multi input[type='text'] {
 		color: rgb(192, 78, 81);
 		background-color: inherit;
 	}
 
-	#alert_message {
+	#alert_message,
+	#report-action-form {
 		border-color: hsl(0, 0%, 25%);
 		background-color: hsl(0, 0%, 15%);
 	}
@@ -1288,6 +1344,47 @@
 
 		.bubble::after {
 			border-right-color: black;
+		}
+	}
+
+	.subreddit-rule-item:hover {
+		background-color: hsl(0, 0%, 17%);
+	}
+
+	#keyHelp {
+		border-color: #999;
+		background-color: #aaa;
+		color: #333;
+
+		td {
+			border-color: #999;
+		}
+	}
+
+	&.res-filteReddit-filterline-pad-until-ready .listing-page .content[role=main] > .spacer:nth-of-type(2)::before,
+	.res-filterline {
+		background-color: rgba(38, 38, 38, .9);
+	}
+
+	.res-filterline {
+		&-filter {
+			border-bottom-color: #383838;
+
+			&-active,
+			&-active:hover {
+				border-bottom-color: #e4e4e4;
+				color: #e4e4e4;
+			}
+		}
+
+		&-dropdown-container { background-color: #313131; }
+		&-external-filter:hover { background-color: #444; }
+	}
+
+	.res-commentNavToggle {
+		&-choices {
+			background-color: rgba(0, 0, 0, .9);
+			box-shadow: rgb(49, 49, 49) 1px 2px 4px;
 		}
 	}
 }

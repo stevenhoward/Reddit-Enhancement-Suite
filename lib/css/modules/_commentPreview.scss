@@ -13,19 +13,32 @@
 	}
 }
 
-.ban-details {
+#banned {
 	position: relative;
 
 	.RESDialogSmall.livePreview {
 		width: 505px;
 	}
+
+	.RESBigEditorPop {
+		float: none;
+		left: 410px;
+		position: absolute;
+	}
 }
 
-#banned .RESBigEditorPop {
-	float: none;
-	left: 414px;
-	bottom: -45px;
-	position: absolute;
+.res-commentPreview-swapBigEditorLayout #BigEditor {
+	.BELeft {
+		left: auto;
+		right: 0;
+		margin-left: 0;
+	}
+
+	.BERight {
+		right: auto;
+		left: 0;
+		margin-right: 0;
+	}
 }
 
 .res-commentPreview-draftStyle {

@@ -1,7 +1,10 @@
+@import '../vendor/index';
+
 @import 'zindex';
 @import 'fonts/batch';
 @import 'modules/nightMode';
-@import 'modules/commentBoxes';
+@import 'modules/version';
+@import 'modules/commentStyle';
 @import 'modules/showParent';
 @import 'modules/quickMessage';
 @import 'modules/accountSwitcher';
@@ -14,6 +17,7 @@
 @import 'modules/newCommentCount';
 @import 'modules/noParticipation';
 @import 'modules/filteReddit';
+@import 'modules/floater';
 @import 'modules/hover';
 @import 'modules/keyboardNav';
 @import 'modules/neverEndingReddit';
@@ -25,6 +29,7 @@
 @import 'modules/showImages';
 @import 'modules/singleClick';
 @import 'modules/sourceSnudown';
+@import 'modules/spoilerTags';
 @import 'modules/styleTweaks';
 @import 'modules/submitIssue';
 @import 'modules/subredditInfo';
@@ -35,6 +40,8 @@
 @import 'modules/userInfo';
 @import 'modules/userTagger';
 @import 'modules/voteEnhancements';
+@import 'modules/commentQuickCollapse';
+@import 'modules/wheelBrowse';
 
 body.res-console-open {
 	overflow: hidden;
@@ -99,7 +106,7 @@ body.res-console-open {
 
 #modalOverlay {
 	visibility: hidden;
-	z-index: $zindex-modal-overlay;
+	z-index: $zindex-console-container - 1;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -141,7 +148,7 @@ body.res-console-open {
 
 	&::before,
 	&::after {
-		font: normal 14px/1 "Batch";
+		font: normal 14px/1 'Batch';
 		vertical-align: middle;
 	}
 
@@ -149,19 +156,6 @@ body.res-console-open {
 		content: '\F04D';
 		color: #a0e0fd;
 		text-shadow: 0 0 1px #3d6da5, 0 0 1px #3d6da5, 0 0 1px #3d6da5, 0 0 1px #3d6da5, 0 0 1px #3d6da5, 0 0 1px #3d6da5, 0 0 1px #3d6da5, 0 0 1px #3d6da5;
-	}
-
-	&.newNotification::before {
-		content: '\F15B';
-		color: orangered;
-		position: absolute;
-		bottom: 25%;
-		left: 25%;
-		animation: fadeIn .5s ease-out 7 alternate;
-	}
-
-	&.newNotification.important::before {
-		animation: gearIconPop 1s ease-out infinite alternate;
 	}
 
 	#header-bottom-right & {
@@ -173,7 +167,19 @@ body.res-console-open {
 	}
 }
 
-@keyframes gearIconPop {
+#RESAnnouncementAlert {
+	display: inline-block;
+	vertical-align: bottom;
+	margin-left: .5em;
+	color: goldenrod;
+	animation: fadeIn .5s ease-out 7 alternate;
+
+	.important {
+		animation: pop 1s ease-out infinite alternate;
+	}
+}
+
+@keyframes pop {
 	from { transform: scale(0, 0); }
 	to { transform: scale(1.5, 1.5); }
 }
@@ -192,40 +198,42 @@ body.res-console-open {
 	border: 1px solid #369;
 	border-bottom: none;
 	margin: 0 !important;
+	font-size: 10px;
 
 	li {
 		position: relative;
 		cursor: pointer;
 		border-bottom: 1px solid #369;
-		height: 35px;
 		line-height: 34px;
 		font-weight: bold;
 		color: #c9def2;
 		padding-left: 10px;
+		box-sizing: content-box;
 	}
 
 	.toggleButton {
-		float: right;
-		margin: 0 4px 0 0;
-		line-height: inherit;
+		line-height: 14px;
+		right: 5px;
+		top: 9px;
+		position: absolute;
+	}
 
-		span {
-			line-height: 16px;
+	a {
+		display: block;
+
+		&,
+		&:link,
+		&:visited {
+			color: inherit;
+			text-decoration: none;
 		}
 	}
 
-	a,
-	a:visited {
-		display: inline-block;
-		width: 100%;
-		height: 100%;
-		color: #c9def2;
-	}
-
 	li:hover,
-	li a:hover {
+	a:hover {
 		background-color: #9cc6ec;
 		color: #369;
+		text-decoration: none;
 	}
 }
 
@@ -236,8 +244,12 @@ body.res-console-open {
 }
 
 #RESLogo {
+	display: inline-block;
 	margin-right: 5px;
 	vertical-align: middle;
+	width: 60px;
+	height: 30px;
+	background-image: url('../images/icon60x30.png');
 }
 
 .RESDialogTopBar {
@@ -341,21 +353,10 @@ body.res-console-open {
 	}
 }
 
-// Allow textarea to be any width without disappearing.
-body.wiki-page #editform,
-.comment form.usertext {
-	overflow: auto; // Same as top-level comment form on vanilla reddit
-}
-
 div.usertext-edit {
 	width: auto;
 	max-width: 500px;
 	padding: 0;
-}
-
-// Correct reddit's miscalculation of textarea width when editing a comment.
-.usertext-body > .md {
-	padding-right: 1px;
 }
 
 .usertext-edit .md,
@@ -496,7 +497,7 @@ div.usertext-edit {
 	width: 200px;
 	height: 40px;
 	position: absolute;
-	z-index: $zindex-keycode-modal;
+	z-index: $zindex-console-container + 1;
 	background-color: #FFF;
 	padding: 4px;
 	border: 2px solid #CCC;
@@ -539,15 +540,15 @@ div.usertext-edit {
 	border-color: #000;
 }
 
-%warningIcon {
+%warning-icon {
 	content: '\F15A';
 	margin-left: 3px;
 	color: rgb(230, 30, 30);
-	font: normal 11px "Batch";
+	font: normal 11px 'Batch';
 }
 
 #RESAllOptionsSpan::after {
-	@extend %warningIcon;
+	@extend %warning-icon;
 }
 
 .optionContainer {
@@ -582,7 +583,7 @@ div.usertext-edit {
 	}
 
 	&.advanced .optionTitle::before {
-		@extend %warningIcon;
+		@extend %warning-icon;
 		margin: 0 4px 0 -15px; // 4+(-15) = 11 == Batch font-size
 	}
 
@@ -614,12 +615,12 @@ div.usertext-edit {
 
 	tr .deleteButton,
 	.builderWrap .deleteButton {
-		visibility: hidden;
+		opacity: .3;
 	}
 
 	tr:hover .deleteButton,
 	.builderWrap:hover > .builderTrailingControls .deleteButton {
-		visibility: visible;
+		opacity: 1;
 	}
 
 	.handle {
@@ -635,6 +636,11 @@ div.usertext-edit {
 	font-size: 14px;
 	flex: 0 0 auto;
 	min-width: 200px;
+}
+
+.optionKey {
+	font-size: .75em;
+	color: #999;
 }
 
 .optionDescription {
@@ -653,9 +659,8 @@ div.usertext-edit {
 
 .moduleButton {
 	font: 12px sans-serif;
-	text-align: right;
 	color: rgb(180, 180, 180);
-	padding: 7px 10px 7px 0;
+	padding: 7px 10px;
 	cursor: pointer;
 
 	&.enabled {
@@ -664,14 +669,95 @@ div.usertext-edit {
 
 	&.active {
 		font-weight: bold;
+		box-shadow: inset 5px 0 0 0 rgb(171, 204, 227);
+	}
+
+	small {
+		display: block;
 	}
 }
 
 .toggleButton {
+
 	position: relative;
-	display: inline-block;
+	display: inline-flex;
 	cursor: pointer;
 	white-space: nowrap;
+
+	.toggleThumb {
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 40px;
+		height: 15px;
+		background-color: #ccc;
+		border: 2px solid #ccc;
+		border-radius: 2px;
+		transition: .1s;
+		transition-timing-function: ease-in;
+	}
+
+	&.enabled {
+		&.reverseToggleButton .toggleThumb {
+			background-color: #c66;
+			border-color: #c66;
+		}
+
+		.toggleThumb {
+			background-color: #369;
+			border-color: #369;
+		}
+	}
+
+	.toggleThumb::before {
+		position: absolute;
+		content: '';
+		height: 15px;
+		width: 15px;
+		left: 2px;
+		border-radius: 2px;
+		background-color: white;
+		transition: .4s;
+	}
+
+	&.enabled .toggleThumb::before {
+		transform: translateX(25px);
+	}
+
+	.toggleLabel {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		// Custom toggle labels
+		&[data-disabled-text]::before {
+			content: '\00a0' attr(data-disabled-text);
+			display: block;
+			line-height: 0;
+			opacity: 1;
+		}
+
+		&[data-enabled-text]::after {
+			content: '\A\00a0' attr(data-enabled-text);
+			display: block;
+			line-height: 0;
+			opacity: 0;
+		}
+
+	}
+
+	// Also custom toggle labels
+	&.enabled .toggleLabel {
+		&[data-disabled-text]::before {
+			opacity: 0;
+		}
+
+		&[data-enabled-text]::after {
+			opacity: 1;
+		}
+	}
 
 	input[type=checkbox] {
 		display: none;
@@ -683,61 +769,6 @@ div.usertext-edit {
 		line-height: 20px;
 		display: inline-block;
 		text-align: center;
-	}
-
-	.toggleOn {
-		border: 1px solid #636363;
-		border-right: none;
-		border-radius: 3px 0 0 3px;
-	}
-
-	.toggleOff {
-		border: 1px solid #636363;
-		border-left: none;
-		border-radius: 0 3px 3px 0;
-	}
-
-	&:not(.enabled) .toggleOn {
-		background-color: #ddd;
-		color: #636363;
-	}
-
-	&:not(.enabled) .toggleOff {
-		background-color: #d02020;
-		color: #fff;
-		font-weight: bolder;
-	}
-
-	&.enabled .toggleOn {
-		background-color: #107ac4;
-		color: #fff;
-		font-weight: bolder;
-	}
-
-	&.enabled .toggleOff {
-		background-color: #ddd;
-		color: #636363;
-	}
-
-	&::before {
-		content: ' ';
-		position: absolute;
-		top: 50%;
-		margin-top: -3px;
-		border: 3px solid;
-		border-color: transparent white;
-		opacity: .3;
-		border-left-width: 0;
-		border-right-width: 5px;
-		left: auto;
-		right: 1px;
-	}
-
-	&.enabled::before {
-		border-left-width: 5px;
-		border-right-width: 0;
-		left: 1px;
-		right: auto;
 	}
 }
 
@@ -751,6 +782,11 @@ div.usertext-edit {
 	margin-right: 10px;
 	display: inline-block;
 	vertical-align: middle;
+}
+
+.moduleKey {
+	font-size: .75em;
+	color: #999;
 }
 
 .optionsTable {
@@ -806,6 +842,10 @@ div.usertext-edit {
 	border-radius: 3px;
 }
 
+a.RESConsoleButton {
+	display: inline-block;
+}
+
 #moduleOptionsSave {
 	float: right;
 	cursor: pointer;
@@ -830,14 +870,14 @@ div.usertext-edit {
 		height: 8px;
 		width: 8px;
 		border-radius: 100%;
-		background: #66EE11;
+		background: white;
 	}
 
 	&.optionsSaved::before {
-		background: #225599;
+		background: #259;
 	}
 
-	&::-moz-focus-inner { // scss-lint:disable PseudoElement
+	&::-moz-focus-inner {
 		border: none;
 		padding: 0;
 	}
@@ -910,7 +950,7 @@ div.usertext-edit {
 
 // Universal subreddit toggle button (subscribe, filter, shortcut, etc)
 // Borrowed from fancy-toggle-button
-.res-fancy-toggle-button {
+%res-fancy-toggle-button {
 	font-weight: bold;
 	font-size: 10px;
 	color: white;
@@ -921,10 +961,20 @@ div.usertext-edit {
 	background-image: linear-gradient(to bottom, rgb(123, 184, 80), rgb(117, 168, 73));
 	border-radius: 3px;
 	cursor: pointer;
+}
+
+.res-fancy-toggle-button {
+	@extend %res-fancy-toggle-button;
 
 	&.remove {
 		background-image: linear-gradient(to bottom, rgb(207, 97, 101), rgb(190, 94, 96));
 	}
+}
+
+span.multi-count {
+	@extend %res-fancy-toggle-button;
+	background: #FF7500;
+	color: white;
 }
 
 .SearchRES-result-header {
@@ -1114,6 +1164,10 @@ div.usertext-edit {
 	strong {
 		font-weight: bolder;
 	}
+
+	.RESNotificationCTA {
+		margin: 1.5em 0 0;
+	}
 }
 
 .RESNotificationFooter {
@@ -1127,6 +1181,7 @@ div.usertext-edit {
 }
 
 .RESNotificationHeader {
+	min-height: 24px;
 	line-height: 24px;
 	padding: 5px 10px;
 	color: rgb(255, 255, 255);
@@ -1166,20 +1221,19 @@ div.usertext-edit {
 }
 
 .RES-spoiler {
-	font-style: italic;
-	text-decoration: dotted underline;
-	cursor: help;
+	.RES-spoiler-title {
+		font-style: italic;
+		text-decoration: dotted underline;
+		cursor: help;
+	}
+
+	&:not(:hover):not(:active) .RES-spoiler-contents {
+		display: none;
+	}
 }
 
-.RES-spoiler-contents {
-	display: none;
-}
-
-.RES-spoiler:hover + .RES-spoiler-contents,
-.RES-spoiler:active + .RES-spoiler-contents,
-.RES-spoiler-contents:active,
-.RES-spoiler-contents:hover {
-	display: inline-block;
+.guider ol {
+	margin: 1em 1em 1em 2em;
 }
 
 .guider dl {
@@ -1195,7 +1249,7 @@ div.usertext-edit {
 	position: fixed;
 	width: 32px;
 	height: 32px;
-	background-image: url('https://s3.amazonaws.com/f.thumbs.redditmedia.com/OvX59a7-5YkWrwLw.png');
+	background-image: url('../images/bacon.png');
 	top: -5%;
 	left: -5%;
 	z-index: $zindex-baconbit;
@@ -1371,188 +1425,6 @@ body.RESScrollLock {
 	z-index: $zindex-autocomplete-dropdown;
 }
 
-//Image Viewer
-img {
-	image-orientation: from-image;
-}
-
-.commentarea .thing .usertext-body .expando-button,
-.listing-page .thing .expando-button {
-	padding: 0;
-}
-
-.profile-page .comment .parent .expando-button {
-	display: inline-block;
-	float: none;
-}
-
-.usertext-body .md .expando-button,
-.wiki-page .expando-button,
-.messages-page .expando-button {
-	float: none;
-	display: inline-block;
-	vertical-align: bottom;
-	margin-left: 4px;
-}
-
-.expando-button {
-	cursor: pointer;
-	user-select: none;
-
-	.res-showImages-highlightNSFWButton .thing.over18 &::before {
-		display: inline-block;
-		content: ' ';
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-		background-image: linear-gradient(45deg, rgba(255, 0, 0, .15) 25%, transparent 25%, transparent 50%, rgba(255, 0, 0, .15) 50%, rgba(255, 0, 0, .15) 75%, transparent 75%, transparent);
-
-	}
-
-	&.image,
-	&.video-muted {
-		vertical-align: top !important;
-		float: left;
-		width: 23px;
-		height: 23px;
-		max-width: 23px;
-		max-height: 23px;
-		display: inline-block;
-		background-image: url('https://b.thumbs.redditmedia.com/s_noD6Owp5p3Hhw9yoBB30iDpSyZFVetFqxtPDbteAw.png');
-		margin-right: 6px;
-		padding: 0;
-
-		&.commentImg {
-			float: none;
-			margin-left: 4px;
-		}
-	}
-
-	&.image.collapsedExpando {
-		padding: 0;
-		background-position: 0 0;
-	}
-
-	&.image.collapsedExpando:hover { background-position: 0 -24px; }
-	&.image.expanded { background-position: 0 -48px; }
-	&.image.expanded:hover { background-position: 0 -72px; }
-	&.image.gallery.collapsedExpando { background-position: 0 -368px; }
-	&.image.gallery.collapsedExpando:hover { background-position: 0 -392px; }
-	&.image.gallery.expanded { background-position: 0 -416px; }
-	&.image.gallery.expanded:hover { background-position: 0 -440px; }
-	&.video-muted.collapsed { background-position: 0 -464px; }
-	&.video-muted.collapsed:hover { background-position: 0 -488px; }
-	&.video-muted.expanded { background-position: 0 -512px; }
-	&.video-muted.expanded:hover { background-position: 0 -536px; }
-}
-
-.madeVisible {
-	clear: left;
-	display: block;
-	overflow: hidden;
-
-	a.madeVisible {
-		display: inline-block;
-		overflow: hidden;
-	}
-}
-
-.RESImage {
-	display: block !important;
-
-	&.loaded {
-		position: absolute;
-	}
-
-	&.RESImageError {
-		content: '';
-
-		&::after {
-			content: 'Loading of image ' attr(src) ' failed. Click to view directly';
-		}
-	}
-}
-
-.RESImagePlaceholder {
-	float: left;
-	display: block !important;
-}
-
-.RESdupeimg {
-	color: #000;
-	font-size: 10px;
-}
-
-.RESClear {
-	clear: both;
-	margin-bottom: 10px;
-}
-
-.RESGalleryControls {
-	margin-bottom: 10px;
-
-	span {
-		line-height: 16px;
-		vertical-align: bottom;
-		padding: 0 5px;
-		font-size: 11px;
-	}
-
-	.next,
-	.previous {
-		&::after {
-			font: normal 18px/16px Batch;
-			content: '\F158';
-			cursor: pointer;
-			display: inline-block;
-			vertical-align: middle;
-			color: #90acff;
-			width: 16px;
-		}
-
-		&:hover::after {
-			color: #6286f4;
-		}
-	}
-
-	.end::after {
-		content: '\F157';
-	}
-
-	.next:not(.end)::after,
-	.previous.end::after {
-		transform: scaleX(-1);
-	}
-}
-
-.imgTitle,
-.md h3.imgTitle {
-	font-size: 13px;
-	margin: 0;
-}
-
-h4.imgCaptions,
-.md h4.imgCaptions {
-	font-size: 11px;
-	font-weight: bold;
-	margin: 0;
-}
-
-div.imgCaptions,
-.md div.imgCaptions {
-	font-size: 11px;
-	white-space: pre-wrap;
-}
-
-.imgCredits {
-	font-size: 11px;
-	padding: 2px;
-}
-
-.thing .title.visited {
-	color: #551A8B;
-}
-
 .usertext iframe {
 	border: none;
 }
@@ -1561,44 +1433,20 @@ div.imgCaptions,
 	content: attr(data-text);
 }
 
-.RESThrobber,
-.RESThrobber::before,
-.RESThrobber::after {
-	font-size: 0;
-	position: relative;
+.RESLoadingSpinner {
+	color: hsl(210, 80%, 50%);
+	font-size: inherit; // Determines size of the icon.
 	display: inline-block;
-	background: #ccf;
-	height: 30px;
-	width: 30px;
+	vertical-align: text-bottom;
+	width: 1em;
+	height: .5em;
+	border-bottom: .5em solid;
 	border-radius: 50%;
-	box-shadow: inset 0 0 5px 1px #222;
-	animation: RESThrobber 1400ms 400ms infinite linear;
+	animation: spin 1000ms 0ms infinite linear;
 }
 
-.RESThrobber {
-	margin: 0 35px -7.5px;
-}
-
-.RESThrobber::before {
-	left: -115%;
-	animation-delay: 200ms;
-}
-
-.RESThrobber::after {
-	left: 115%;
-	animation-delay: 600ms;
-}
-
-.RESThrobber::before,
-.RESThrobber::after {
-	content: '';
-	position: absolute;
-	top: 0;
-}
-
-@keyframes RESThrobber {
-	30% { background: transparent; }
-	70% { background: transparent; }
+@keyframes spin {
+	100% { transform: rotate(360deg); }
 }
 
 // Handle multireddit bar on savedComments page
@@ -1612,22 +1460,36 @@ div.imgCaptions,
 
 #alert_message {
 	display: none;
-	opacity: 0;
-	background-color: #EFEFEF;
-	border: 1px solid black;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	box-sizing: border-box;
+	width: 500px;
+	max-height: 100%;
+	margin: auto;
+	padding: 10px;
 	color: black;
-	font-size: 12px;
-	padding: 20px 40px;
-	position: fixed !important;
-	width: 400px;
-	z-index: $zindex-alert-message;
 	text-align: left;
+	font-size: 12px;
+	border: 1px solid;
+	background-color: #EFEFEF;
+	overflow: auto;
+	z-index: $zindex-alert-message;
+
+	@media (max-width: 520px) {
+		width: auto;
+		left: 10px;
+		right: 10px;
+	}
+
+	@media (max-height: 520px) {
+		height: auto;
+		bottom: 10px;
+	}
 
 	input {
-		border: 1px solid black;
-		font-family: normal x-small verdana, arial, helvetica, sans-serif;
-		font-weight: bold;
-		font-size: 10px;
+		border: 1px solid;
 		padding: 6px 9px;
 		float: left;
 		background-color: #DFDFDF;
@@ -1639,7 +1501,7 @@ div.imgCaptions,
 		}
 	}
 
-	div {
+	> div {
 		margin-bottom: 20px;
 	}
 }
@@ -1650,7 +1512,7 @@ div.imgCaptions,
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background-color: rgba(51, 51, 51, .95);
+	background-color: rgba(0, 0, 0, .7);
 	z-index: $zindex-alert-message - 1;
 }
 
@@ -1734,8 +1596,8 @@ div.RESSortPlaceholder::after {
 		}
 	}
 
-	input[type="text"],
-	input[type="checkbox"] {
+	input[type='text'],
+	input[type='checkbox'] {
 		float: none;
 		margin-left: initial;
 		width: auto;
@@ -1769,7 +1631,7 @@ div.RESSortPlaceholder::after {
 	.durationField {
 		display: inline-block;
 
-		input[type="number"] {
+		input[type='number'] {
 			width: 3em;
 			//margin-left: 1ex;
 		}
@@ -1832,7 +1694,7 @@ div.RESSortPlaceholder::after {
 .checkset {
 	display: inline-block;
 
-	input[type="checkbox"] {
+	input[type='checkbox'] {
 		display: none;
 	}
 
@@ -1859,7 +1721,7 @@ div.RESSortPlaceholder::after {
 	}
 }
 
-/*
+/*!
 (cs)spinner.css - http://jh3y.github.io/-cs-spinner
 Licensed under the MIT license
 
@@ -1883,7 +1745,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		right: 0;
 		bottom: 0;
 		left: 0;
-		background-color: #999999;
+		background-color: #999;
 		opacity: .6;
 	}
 
@@ -1898,7 +1760,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		margin: -24px 0 0 -24px;
 		transition: all .75s ease 0s;
 		border-radius: 100%;
-		border-top: 4px solid #555555;
+		border-top: 4px solid #555;
 		animation: fadeIn 2s 1 cubic-bezier(.3, .25, .7, .15), standard .75s infinite linear;
 		transform-origin: center;
 	}
@@ -1929,56 +1791,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	}
 }
 
-#url-field {
-	.progress-wrapper {
-		width: 500px;
-		height: 8px;
-		position: absolute;
-		top: 54px;
-		left: 10px;
-		overflow: hidden;
-
-		.progress {
-			display: block;
-			position: absolute;
-			left: 0;
-			top: 0;
-			height: 8px;
-		}
-	}
-
-	.progress {
-		animation: progressbar 1s linear infinite;
-		background-color: #149bdf;
-		background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-		background-size: 40px 40px;
-
-		&.progress-stalled {
-			background-image: none;
-		}
-
-		&.progress-grey {
-			background-color: #888;
-		}
-
-		&.progress-green {
-			background-color: #5eb95e;
-		}
-
-		&.progress-red {
-			background-color: #ff0000;
-		}
-	}
-}
-
-@keyframes progressbar {
-	from {
-		background-position: 0 0;
-	}
-
-	to {
-		background-position: 39px 0;
-	}
+.RESCenteredLoadIndicator {
+	display: flex;
+	justify-content: center;
 }
 
 #RESStyleSheetTipPane {
@@ -2020,63 +1835,59 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	}
 }
 
-// user-select: none; on comment widgets, for usability reasons
-.md .keyNavAnnotation,
-.md .RESUserTag,
-.md .RESdupeimg,
-.md .expando-button,
-.md .madeVisible {
-	user-select: none;
-}
-
-// gifyoutube player
-.gifyoutube-source {
-	float: left;
-}
-
-.res-player.gifyoutube .gifyoutube-controls .res-lightweight-player-controls,
-.res-player.gifyoutube .gifyoutube-source-button {
-	color: #fff;
-	font-size: 16px;
-	padding: 5px 10px;
+.res-step {
 	cursor: pointer;
-	float: none;
-	margin-right: 0;
-	margin-left: 5px;
+	user-select: none;
+
+	&::after {
+		font: normal 18px/16px Batch;
+		content: '\F158';
+		display: inline-block;
+		vertical-align: middle;
+		color: #90acff;
+		width: 16px;
+	}
+
+	&:hover::after {
+		color: #6286f4;
+	}
+
+	&.res-step-reverse::after {
+		transform: scaleX(-1);
+	}
 }
 
-.gifyoutubeCtrlSlower,
-.gifyoutubeCtrlFaster {
-	border-radius: 3px;
-	background-color: #f0ad4e;
-	border: 1px solid #eea236;
+.res-step-progress {
+	font-size: 13px;
+	min-width: 60px;
+	text-align: center;
 }
 
-.res-player.gifyoutube .gifyoutube-source-button {
-	margin-left: 0;
+.tabmenu li.res-tabmenu-button {
+	user-select: none;
+	display: inline-block;
+
+	a {
+		cursor: pointer;
+
+		&[aftercontent]::after {
+			content: attr(aftercontent);
+		}
+	}
+
+	&.selected a:not(:only-child) {
+		&:first-child {
+			border-right: none;
+		}
+
+		&:last-child {
+			border-left: none;
+		}
+	}
 }
 
-.gifyoutubeCtrlPause {
-	border-radius: 3px;
-	background-color: #5cb85c;
-	border: 1px solid #4cae4c;
-}
-
-.gifyoutube-controls {
-	float: right;
-}
-
-.gifyoutube-source-button {
-	border-radius: 3px;
-	background-color: #5bc0de;
-	border: 1px solid #46b8da;
-}
-
-// imgur gifv player
-.imgurgifv-brand {
-	float: left;
-}
-
-.imgurgifv-download {
-	float: right;
+#beta-help .help-section::after {
+	margin: .5em;
+	display: block;
+	content: 'Since you are using RES with reddit beta, you should also check out /r/RESissues if you experience bugs.';
 }

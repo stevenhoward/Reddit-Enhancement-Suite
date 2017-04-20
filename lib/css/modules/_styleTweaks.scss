@@ -11,35 +11,29 @@ blockquote.twitter-tweet {
 	}
 }
 
-// wow, Reddit doesn't define a visited class for any links on comments pages...
-// let's put that back if users want it back.
-// If not, we still need a visited class for links in comments, like imgur photos for example, or inline image viewer can't make them look different when expanded!
+// wow, Reddit only adds a visited style for submission titles!
+// let's add visited styles to user-editable content (.md) if the user wants to.
 .res-styleTweaks-visitedStyle {
-	.comment .parent,
-	.comment .tagline,
-	.comment .usertext {
-		a:visited {
-			color: #551a8b;
-
-			.res-nightmode & {
-				color: hsl(270, 50%, 65%);
-			}
-		}
-	}
-}
-
-body:not(.res-styleTweaks-visitedStyle) {
-	.comment .md p > a:visited {
-		color: #551a8b;
+	.md a:visited {
+		color: #551a8b; // same color as submission titles.
 
 		.res-nightmode & {
+			color: hsl(0, 0%, 65%);
+		}
+
+		.res-nightmode.res-nightMode-coloredLinks & {
 			color: hsl(270, 50%, 65%);
 		}
 	}
 }
 
 .res-styleTweaks-showExpandos {
-	.compressed .expando-button { display: block; }
+	.link.compressed {
+		// post expandos
+		.entry > .expando-button { display: block; }
+		// self post inner expandos
+		.expando-button { display: inline-block; }
+	}
 }
 
 .res-styleTweaks-hideUnvotable {
@@ -57,6 +51,23 @@ body:not(.res-styleTweaks-visitedStyle) {
 
 .res-styleTweaks-highlightEditedTime {
 	.edited-timestamp { font-weight: bolder; }
+}
+
+.res-colorblind {
+	#mail,
+	#NREMail {
+		&.havemail {
+			background-image: url('../images/colorblindMail.png');
+			background-position: 0 0;
+		}
+	}
+}
+
+.res-styleTweaks-scrollSubredditDropdown {
+	.drop-choices.srdrop {
+		overflow-y: scroll;
+		max-height: 95vh;
+	}
 }
 
 .res-navTop {
@@ -109,4 +120,30 @@ body:not(.res-styleTweaks-visitedStyle) {
 
 .res-styleTweaks-postTitleCapitalization-lowercase {
 	.entry a.title { text-transform: lowercase; }
+}
+
+.res-styleTweaks-floatingSideBar {
+	body.with-listing-chooser .listing-chooser {
+		position: fixed;
+		top: 0;
+		overflow-y: auto;
+
+		.contents {
+			margin-top: 65px;
+		}
+	}
+}
+
+.res-srstyle-disabled {
+	#header-img-a {
+		display: inline-block;
+		width: 120px;
+		height: 40px;
+		overflow: hidden;
+	}
+}
+
+.res-sr-style-toggle {
+	display: flex;
+	align-items: center;
 }

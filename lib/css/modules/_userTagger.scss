@@ -1,16 +1,17 @@
-.comment .tagline {
-	display: inline;
-}
-
 #userTaggerToolTip {
 	display: none;
 	position: absolute;
-	width: 334px;
-	height: 248px;
+	width: 336px;
+	box-sizing: border-box;
+	z-index: $zindex-res-hover;
+
+	form > div {
+		clear: both;
+		margin: 5px 0;
+	}
 
 	label {
-		margin-top: 5px;
-		clear: both;
+		margin: 5px 0;
 		float: left;
 		width: 110px;
 	}
@@ -18,11 +19,8 @@
 	input[type=text],
 	select {
 		margin-top: 5px;
-		float: left;
-		width: 195px;
-		border: 1px solid #c7c7c7;
-		border-radius: 3px;
-		margin-bottom: 6px;
+		width: 200px;
+		box-sizing: border-box;
 	}
 
 	input[type=checkbox] {
@@ -31,10 +29,8 @@
 	}
 
 	input[type=submit] {
+		margin-left: auto;
 		cursor: pointer;
-		position: absolute;
-		right: 16px;
-		bottom: 16px;
 		padding: 3px 5px;
 		font-size: 12px;
 		color: #fff;
@@ -43,56 +39,84 @@
 		background-color: #5cc410;
 	}
 
-	.toggleButton {
-		margin-top: 5px;
-		margin-bottom: 5px;
-		float: left;
+	a {
+		text-decoration: none;
 
-		.toggleOn {
-			background-color: #107ac4;
-			color: #fff;
-		}
-
-		.toggleOff {
-			background-color: #ddd;
-			color: #636363;
-		}
-
-		&.enabled {
-			.toggleOn {
-				background-color: #ddd;
-				color: #636363;
-			}
-
-			.toggleOff {
-				background-color: #d02020;
-				color: #fff;
-			}
+		&:not([href]) {
+			color: inherit;
 		}
 	}
 
 	#userTaggerVoteWeight {
 		width: 30px;
 	}
+
+	h3 .res-icon {
+		color: #9BD;
+	}
+
+	.res-usertag-ignore {
+		display: flex;
+		align-items: center;
+
+		.gearIcon {
+			margin-left: auto;
+		}
+	}
+
+	.res-usertagger-footer {
+		padding-top: 5px;
+		margin-bottom: 0;
+		display: flex;
+		align-items: center;
+	}
 }
 
 #userTaggerClose {
-	position: absolute;
 	right: 7px;
 	top: 7px;
-	z-index: 11;
 }
 
-.ignoredUserComment {
-	color: #CACACA;
-	padding: 3px;
-	font-size: 10px;
+.res-ignored-message {
+	color: rgb(170, 170, 170);
+	cursor: default;
+
+	.comment & {
+		line-height: 2;
+	}
+
+	.res-icon {
+		font-size: inherit;
+	}
 }
 
-.ignoredUserPost {
-	color: #CACACA;
-	padding: 3px;
-	font-size: 10px;
+.res-ignored-content {
+	&.link {
+		a.title,
+		.expando-button,
+		.expando {
+			display: none !important;
+		}
+
+		.thumbnail {
+			visibility: hidden !important;
+		}
+	}
+
+	&.comment > .entry {
+		.md {
+			display: none !important;
+		}
+	}
+
+	&.search-result {
+		a.search-title,
+		.search-expando,
+		.search-expando-button,
+		.search-result-footer {
+			display: none !important;
+		}
+	}
 }
 
 a.voteWeight {
@@ -101,6 +125,11 @@ a.voteWeight {
 
 	&:hover {
 		text-decoration: none;
+	}
+
+	// unselectable in comments/markdown for usability
+	.md & {
+		user-select: none;
 	}
 }
 
@@ -111,43 +140,51 @@ a.voteWeight {
 
 .RESUserTag {
 	color: black;
+
+	// unselectable in comments/markdown for usability
+	.md & {
+		user-select: none;
+	}
 }
 
 .RESUserTagImage::after {
 	content: '\F0AC';
-	font: normal 14px/8px "Batch";
+	font: normal 14px/8px 'Batch';
 	vertical-align: middle;
 	color: #9BD;
 }
 
-.userTagLink {
-	display: inline-block;
-
-	&.RESUserTagImage:hover {
-		text-decoration: none;
-	}
+.userTagLink.RESUserTagImage:hover {
+	text-decoration: none;
 }
 
 .hoverHelp {
-	margin-left: 3px;
 	cursor: pointer;
 	color: #369;
-	text-decoration: underline;
 }
 
 .userTagLink.hasTag,
 #userTaggerPreview {
-	display: inline-block;
+	display: inline;
 	padding: 0 4px;
 	line-height: normal;
 	border: 1px solid #c7c7c7;
 	border-radius: 3px;
 }
 
+.userTagLink.hasTag {
+	font-size: .9em;
+}
+
 #userTaggerPreview {
-	float: left;
-	height: 16px;
-	margin-bottom: 10px;
+	display: inline-block;
+	height: 1.6em;
+	line-height: 1.6em;
+	margin: 5px 0 0 0 !important;
+	box-sizing: border-box;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #userTaggerTable th {
@@ -162,8 +199,4 @@ a.voteWeight {
 	&:hover {
 		color: #333;
 	}
-}
-
-.userTagged {
-	margin-right: 5px;
 }
